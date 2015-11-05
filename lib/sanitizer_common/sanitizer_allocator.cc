@@ -20,16 +20,9 @@ namespace __sanitizer {
 
 // ThreadSanitizer for Go uses libc malloc/free.
 #if defined(SANITIZER_GO) || defined(SANITIZER_USE_MALLOC)
-# if SANITIZER_LINUX && !SANITIZER_ANDROID
-extern "C" void *__libc_malloc(uptr size);
-extern "C" void __libc_free(void *ptr);
-#  define LIBC_MALLOC __libc_malloc
-#  define LIBC_FREE __libc_free
-# else
-#  include <stdlib.h>
-#  define LIBC_MALLOC malloc
-#  define LIBC_FREE free
-# endif
+# include <stdlib.h>
+# define LIBC_MALLOC malloc
+# define LIBC_FREE free
 
 static void *RawInternalAlloc(uptr size, InternalAllocatorCache *cache) {
   (void)cache;
