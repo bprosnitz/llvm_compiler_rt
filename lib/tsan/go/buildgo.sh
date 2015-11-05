@@ -35,7 +35,7 @@ SRCS="
 
 if [ "`uname -a | grep Linux`" != "" ]; then
 	SUFFIX="linux_amd64"
-	OSCFLAGS="-fPIC -ffreestanding -Wno-maybe-uninitialized -Wno-unused-const-variable -Werror -Wno-unknown-warning-option"
+	OSCFLAGS="-fPIC -ffreestanding -Wno-maybe-uninitialized -Wno-unused-const-variable -Wno-unknown-warning-option"
 	OSLDFLAGS="-lpthread -lrt -fPIC -fpie"
 	SRCS="
 		$SRCS
