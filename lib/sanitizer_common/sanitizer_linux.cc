@@ -394,11 +394,6 @@ const char *GetEnv(const char *name) {
 #endif
 }
 
-extern "C" {
-  SANITIZER_WEAK_ATTRIBUTE extern void *__libc_stack_end;
-}
-
-#if !SANITIZER_GO
 static void ReadNullSepFileToArray(const char *path, char ***arr,
                                    int arr_size) {
   char *buff;
@@ -421,23 +416,11 @@ static void ReadNullSepFileToArray(const char *path, char ***arr,
   }
   (*arr)[count] = nullptr;
 }
-#endif
 
 static void GetArgsAndEnv(char*** argv, char*** envp) {
-#if !SANITIZER_GO
-  if (&__libc_stack_end) {
-#endif
-    uptr* stack_end = (uptr*)__libc_stack_end;
-    int argc = *stack_end;
-    *argv = (char**)(stack_end + 1);
-    *envp = (char**)(stack_end + argc + 2);
-#if !SANITIZER_GO
-  } else {
     static const int kMaxArgv = 2000, kMaxEnvp = 2000;
     ReadNullSepFileToArray("/proc/self/cmdline", argv, kMaxArgv);
     ReadNullSepFileToArray("/proc/self/environ", envp, kMaxEnvp);
-  }
-#endif
 }
 
 void ReExec() {
